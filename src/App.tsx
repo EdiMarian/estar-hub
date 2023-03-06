@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import { EnvironmentsEnum } from '@multiversx/sdk-dapp/types';
+import { DappProvider } from '@multiversx/sdk-dapp/wrappers';
+import {
+  TransactionsToastList,
+  SignTransactionsModals,
+  NotificationModal
+} from '@multiversx/sdk-dapp/UI';
+import { API_TIMEOUT } from './config';
+import { DefaultLayout, Layout } from './components';
+import { routes } from './routes';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <DappProvider
+        environment={EnvironmentsEnum.mainnet}
+        customNetworkConfig={{ name: 'customConfig', apiTimeout: API_TIMEOUT }}
+      >
+        <Layout>
+          <TransactionsToastList />
+          <NotificationModal />
+          <SignTransactionsModals className='custom-class-for-modals' />
+          <GoogleOAuthProvider clientId='845043166725-b80hk2r3dio8nfjc7915o9lpfels3ugn.apps.googleusercontent.com'>
+              <Routes>
+                {routes.map((route, index) => (
+                  <Route
+                    path={route.path}
+                    key={'route-key-' + index}
+                    element={<DefaultLayout><route.component /></DefaultLayout>}
+                  />
+                ))}
+                {/* <Route path='*' element={<PageNotFound />} /> */}
+              </Routes>
+          </GoogleOAuthProvider>
+        </Layout>
+      </DappProvider>
+    </Router>
   );
 }
 
