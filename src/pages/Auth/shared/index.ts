@@ -1,1 +1,1 @@
-export * from './AuthMethod'
+export * from './AuthMethod';

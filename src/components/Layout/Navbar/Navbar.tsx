@@ -23,22 +23,26 @@ export const Navbar = observer(() => {
               Home
             </Link>
           </Nav.Item>
-          {isLoggedIn ? 
-          <>
+          {isLoggedIn ? (
+            <>
+              <Nav.Item>
+                <Link to={routeNames.account} className='nav-link'>
+                  <FontAwesomeIcon icon={faUser} />
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <div className='nav-link' onClick={() => accountStore.logOut()}>
+                  <FontAwesomeIcon icon={faPowerOff} />
+                </div>
+              </Nav.Item>
+            </>
+          ) : (
             <Nav.Item>
-            <Link to={routeNames.account} className='nav-link'>
-                <FontAwesomeIcon icon={faUser} />
-              </Link>
-          </Nav.Item>
-          <Nav.Item>
-            <div  className='nav-link' onClick={() => accountStore.logOut()}><FontAwesomeIcon icon={faPowerOff}/></div>
-          </Nav.Item>
-          </>
-          :  <Nav.Item>
-          <Link to={routeNames.login} className='nav-link'>
+              <Link to={routeNames.login} className='nav-link'>
                 Login
               </Link>
-        </Nav.Item>}
+            </Nav.Item>
+          )}
         </Nav>
       </NavbarBootstrap.Collapse>
     </NavbarBootstrap>

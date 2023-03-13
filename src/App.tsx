@@ -15,7 +15,7 @@ import accountStore from './store/AccountStore';
 function App() {
   useEffect(() => {
     accountStore.loadAccount();
-  }, [])
+  }, []);
 
   return (
     <Router>
@@ -28,16 +28,20 @@ function App() {
           <NotificationModal />
           <SignTransactionsModals className='custom-class-for-modals' />
           <GoogleOAuthProvider clientId='845043166725-b80hk2r3dio8nfjc7915o9lpfels3ugn.apps.googleusercontent.com'>
-              <Routes>
-                {routes.map((route, index) => (
-                  <Route
-                    path={route.path}
-                    key={'route-key-' + index}
-                    element={<DefaultLayout><route.component /></DefaultLayout>}
-                  />
-                ))}
-                {/* <Route path='*' element={<PageNotFound />} /> */}
-              </Routes>
+            <Routes>
+              {routes.map((route, index) => (
+                <Route
+                  path={route.path}
+                  key={'route-key-' + index}
+                  element={
+                    <DefaultLayout>
+                      <route.component />
+                    </DefaultLayout>
+                  }
+                />
+              ))}
+              {/* <Route path='*' element={<PageNotFound />} /> */}
+            </Routes>
           </GoogleOAuthProvider>
         </Layout>
       </DappProvider>
