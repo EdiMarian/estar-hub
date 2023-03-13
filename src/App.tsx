@@ -10,7 +10,13 @@ import { API_TIMEOUT } from './config';
 import { DefaultLayout, Layout } from './components';
 import { routes } from './routes';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { useEffect } from 'react';
+import accountStore from './store/AccountStore';
 function App() {
+  useEffect(() => {
+    accountStore.loadAccount();
+  }, [])
+
   return (
     <Router>
       <DappProvider

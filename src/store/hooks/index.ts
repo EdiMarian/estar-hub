@@ -1,2 +1,1 @@
-export * from './useGetAccount'
-export * from './IsLoggedIn'
+export * from './index'

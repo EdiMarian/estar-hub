@@ -5,20 +5,11 @@ import { routeNames } from '../../../routes';
 import { Link } from 'react-router-dom';
 import { faPowerOff, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IsLoggedIn, useGetAccount } from '../../../store';
-import { googleLogout } from '@react-oauth/google';
-import Cookies from 'js-cookie';
+import { observer } from 'mobx-react-lite';
+import accountStore from '../../../store/AccountStore';
 
-export const Navbar = () => {
-  const isLoggedIn= IsLoggedIn();
-  const {setAccessToken} = useGetAccount()
-
-  const logOut = () => {
-    googleLogout();
-    Cookies.remove('access_token');
-    setAccessToken('');
-  }
-
+export const Navbar = observer(() => {
+  const { isLoggedIn } = accountStore;
   return (
     <NavbarBootstrap expand='lg' className='px-md-5'>
       <Link to={routeNames.home}>
@@ -32,17 +23,17 @@ export const Navbar = () => {
               Home
             </Link>
           </Nav.Item>
-          {isLoggedIn ? <>
+          {isLoggedIn ? 
+          <>
             <Nav.Item>
             <Link to={routeNames.account} className='nav-link'>
                 <FontAwesomeIcon icon={faUser} />
               </Link>
           </Nav.Item>
           <Nav.Item>
-            <div  className='nav-link' onClick={logOut}><FontAwesomeIcon icon={faPowerOff}/></div>
+            <div  className='nav-link' onClick={() => accountStore.logOut()}><FontAwesomeIcon icon={faPowerOff}/></div>
           </Nav.Item>
           </>
-            
           :  <Nav.Item>
           <Link to={routeNames.login} className='nav-link'>
                 Login
@@ -52,4 +43,4 @@ export const Navbar = () => {
       </NavbarBootstrap.Collapse>
     </NavbarBootstrap>
   );
-};
+});
