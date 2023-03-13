@@ -34,6 +34,10 @@ class AccountStore {
         Cookies.remove('access_token');
         this.account = undefined;
     }
+
+    get haveAddressAssociated(): boolean {
+        return this.account?.address != null;
+    }
 }
 
 const accountStore = new AccountStore();

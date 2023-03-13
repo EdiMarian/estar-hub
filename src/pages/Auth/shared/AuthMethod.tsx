@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { routeNames } from '../../../routes';
 import accountStore from '../../../store/AccountStore';
 import { observer } from 'mobx-react-lite';
+import { LinkxPortal } from '../LinkxPortal';
 
 export const AuthMethod = observer(({method}: {method: 'login' | 'register'}) => {
 
@@ -16,7 +17,10 @@ export const AuthMethod = observer(({method}: {method: 'login' | 'register'}) =>
     accountStore.loadAccount();
   }
 
-  if(accountStore.isLoggedIn) return <Navigate to={routeNames.home}/>
+  if(accountStore.isLoggedIn) {
+    if(!accountStore.haveAddressAssociated) return <LinkxPortal />;
+    return <Navigate to={routeNames.home}/>
+  }
 
   if(method === 'login') return (
     <GoogleLogin onSuccess={(credentialResponse: any) => {
