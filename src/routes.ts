@@ -2,12 +2,12 @@ import { RouteType } from '@multiversx/sdk-dapp/types';
 // import { dAppName } from 'config';
 // import { withPageTitle } from './components';
 
-import { Home, Login, Register, Account } from './pages';
+import { Home, Login, CreateAccount, Account } from './pages';
 
 export const routeNames = {
   home: '/',
   login: '/login',
-  register: '/register',
+  createAccount: '/login/create',
   account: '/account'
 };
 
@@ -21,8 +21,8 @@ export const routes: RouteType[] = [
     component: Login
   },
   {
-    path: routeNames.register,
-    component: Register
+    path: routeNames.createAccount,
+    component: CreateAccount
   },
   {
     path: routeNames.account,

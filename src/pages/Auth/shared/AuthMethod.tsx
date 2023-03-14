@@ -4,29 +4,36 @@ import { Navigate } from 'react-router-dom';
 import { routeNames } from '../../../routes';
 import accountStore from '../../../store/AccountStore';
 import { observer } from 'mobx-react-lite';
+import { LinkxPortal } from '../LinkxPortal';
 
-export const AuthMethod = observer(({method}: {method: 'login' | 'register'}) => {
+export const AuthMethod = observer(
+  ({ method }: { method: 'login' | 'register' }) => {
+    const setInCookies = (credential: string) => {
+      accountStore.setAccessToken(credential);
+      accountStore.loadAccount();
+    };
+    console.log(accountStore.accessToken && !accountStore.isLoggedIn);
 
-  const date = new Date();
-  date.setTime(date.getTime() + (120 * 1000));
+    if (accountStore.accessToken && !accountStore.isLoggedIn)
+      return <Navigate to={routeNames.createAccount} />;
 
-  const setInCookies = (credential: string) => {
-    Cookies.set('access_token', credential, {expires: date});
+    if (accountStore.isLoggedIn) {
+      if (!accountStore.haveAddressAssociated) return <LinkxPortal />;
+      return <Navigate to={routeNames.home} />;
+    }
 
-    accountStore.loadAccount();
+    if (method === 'login')
+      return (
+        <GoogleLogin
+          onSuccess={(credentialResponse: any) => {
+            setInCookies(credentialResponse.credential);
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
+      );
+
+    return <div>register</div>;
   }
-
-  if(accountStore.isLoggedIn) return <Navigate to={routeNames.home}/>
-
-  if(method === 'login') return (
-    <GoogleLogin onSuccess={(credentialResponse: any) => {
-      setInCookies(credentialResponse.credential)
-    }} onError={() => {
-      console.log('Login Failed');
-    }} />
-  )
-
-  return (
-    <div>register</div>
-  )
-});
+);
