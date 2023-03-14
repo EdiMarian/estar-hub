@@ -11,7 +11,7 @@ const Login = () => {
       </Row>
       <Row>
         <Col>
-          <AuthMethod method='login' />
+          <AuthMethod />
         </Col>
       </Row>
     </>

@@ -8,12 +8,14 @@ import { googleLogout } from '@react-oauth/google';
 class AccountStore {
   account?: Account;
   accessToken?: string;
+  isLoading: boolean = false;
 
   constructor() {
     makeAutoObservable(this);
   }
 
   async loadAccount(): Promise<void> {
+    this.isLoading = true;
     const access_token = Cookies.get('access_token');
     const { data } = await axios.get(
       ESTAR_API + '/users/access_token/' + access_token
@@ -22,6 +24,7 @@ class AccountStore {
       const account: Account = data.data;
       this.account = new Account(account);
     }
+    this.isLoading = false;
   }
 
   setAccessToken(credential: string): void {
