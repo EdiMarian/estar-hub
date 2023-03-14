@@ -16,12 +16,14 @@ const CreateAccount = observer(() => {
   if (!accountStore.getAccessToken) return <Navigate to={routeNames.login} />;
 
   const createAccount = async () => {
-    if(!accountStore.getAccessToken) {
+    if (!accountStore.getAccessToken) {
       setError('Try again later!');
       return;
-    };
-    const accountDecoded: {email: string} = jwtDecode(accountStore.getAccessToken);
-    if(!accountDecoded.email) {
+    }
+    const accountDecoded: { email: string } = jwtDecode(
+      accountStore.getAccessToken
+    );
+    if (!accountDecoded.email) {
       setError('Try again later! email');
       return;
     }
@@ -29,39 +31,48 @@ const CreateAccount = observer(() => {
     try {
       const { data } = await axios.post(ESTAR_API + '/users', {
         email: accountDecoded.email,
-        username: username.replaceAll(' ', '').toUpperCase(),
-      })
-      if(typeof data === 'string') {
+        username: username.replaceAll(' ', '').toUpperCase()
+      });
+      if (typeof data === 'string') {
         setError(data);
         return;
-      };
+      }
       accountStore.loadAccount();
     } catch {
-      setError('An error!')
+      setError('An error!');
     }
-  }
+  };
 
   return (
     <>
-    <Row>
-      <Col>
-        <h4 className='text-center'>To create account you need to set an username!</h4>
-      </Col>
-    </Row>
+      <Row>
+        <Col>
+          <h4 className='text-center'>
+            To create account you need to set an username!
+          </h4>
+        </Col>
+      </Row>
       <Row>
         <Col>
           <Form>
             <Form.Group className='mb-3'>
               <Form.Label>Username</Form.Label>
-              <Form.Control type='string' placeholder='Enter username' value={username} onChange={(e) => setUsername(e.target.value)} />
-              {error && <Form.Text className='text-danger'>
-                {error}
-              </Form.Text>}
+              <Form.Control
+                type='string'
+                placeholder='Enter username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              {error && <Form.Text className='text-danger'>{error}</Form.Text>}
             </Form.Group>
             <Button variant='primary' onClick={createAccount}>
               Submit
             </Button>
-            <Button variant='secondary' onClick={() => accountStore.resetAccessToken()} className='mx-2'>
+            <Button
+              variant='secondary'
+              onClick={() => accountStore.resetAccessToken()}
+              className='mx-2'
+            >
               Abandon
             </Button>
           </Form>

@@ -7,9 +7,7 @@ import { LinkAddress } from './components/LinkAddress';
 
 export const Account = observer(() => {
   const { isLoggedIn, isLoading, haveAddressAssociated } = accountStore;
-  if(isLoading) return <Loading loadingText='Fetching account...' />
+  if (isLoading) return <Loading loadingText='Fetching account...' />;
   if (!isLoggedIn) return <Navigate to={routeNames.login} />;
-  return <>
-    {!haveAddressAssociated && <LinkAddress />}
-  </>;
+  return <>{!haveAddressAssociated && <LinkAddress />}</>;
 });
